@@ -2,6 +2,15 @@
 #include <string>
 #include "convertor.h"
 
+std::string lower_to_upper ( std::string hex ) {
+	for ( int i = 0; i < 2; i++ ) {
+		if ( hex.at(i) >= 'a' && hex.at(i) <= 'f' ) {
+			hex.at(i) = hex.at(i) - 'a' + 'A';
+		}
+	}
+	return hex;
+}
+
 int hex_to_int ( std::string hex ) {
 	int a[2];
 	int ans;
