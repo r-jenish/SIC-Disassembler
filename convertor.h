@@ -1,7 +1,9 @@
 #ifndef _CONVERTOR_H_
 #define _CONVERTOR_H_
 
-int hex_to_int(string);
-string int_to_hex(int);
+#include <string>
+
+int hex_to_int(std::string);
+std::string int_to_hex(int);
 
 #endif

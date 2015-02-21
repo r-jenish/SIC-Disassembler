@@ -1,7 +1,9 @@
 #ifndef _OPTAB_H_
 #define _OPTAB_H_
 
+#include <string>
+
 void initialise_optab(void);
-string get_mnemonic(int);
+std::string get_mnemonic(int);
 
 #endif

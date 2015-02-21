@@ -1,11 +1,11 @@
 #include <string>
 #include "optable.h"
 
-string optab[256];
+std::string optab[256];
 
 void initialise_optab ( void ) {
 	for ( int i = 0; i < 256; i++ ) {
-		optab = "NULL";
+		optab[i] = "NULL";
 	}
 	optab[0] = "LDA";
 	optab[4] = "LDX";
@@ -35,6 +35,6 @@ void initialise_optab ( void ) {
 	optab[232] = "STSW";	
 }
 
-string get_mnemonic ( int opcode ) {
+std::string get_mnemonic ( int opcode ) {
 	return optab[opcode];
 }
