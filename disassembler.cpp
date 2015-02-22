@@ -10,14 +10,14 @@ using namespace std;
 string programname;
 int start_address;
 int exe_address;
-int length;
+int prog_length;
 int header_record[19];
 bool recordflag[2] = {false,false};
-int mem[65536][2];						 /*mem[][0] = code and mem[][1] = data*/
+int mem[65540][2];						 /*mem[][0] = code and mem[][1] = data*/
 int end_record[7];
 
 void clearmem () {
-	for ( int i = 0; i < 65536; i++ ) {
+	for ( int i = 0; i < 65540; i++ ) {
 		mem[i][0] = -1;
 		mem[i][1] = -1;
 	}
@@ -28,7 +28,7 @@ void readinput ( char* input ) {
 	string line;
 	string hex = "00";
 	ifstream infile;
-	infile.open("input.in",ifstream::in);
+	infile.open("SAMPLE.in",ifstream::in);
 	while ( getline(infile,line) ) {
 		switch ( line.at(0) ) {
 			case 'H':
@@ -51,7 +51,7 @@ void readinput ( char* input ) {
 							header_record[i] = line.at(i);
 							hex += line.at(i);
 						}
-						length = hex_to_int6(hex);
+						prog_length = hex_to_int6(hex);
 						recordflag[0] = true;
 					} else {
 						//fatalerror("MORE THAN ONE HEADER RECORD.");
@@ -64,7 +64,30 @@ void readinput ( char* input ) {
 				}
 				break;
 			case 'T':
-				
+				int len;
+				hex = "";
+				hex += line.at(7);
+				hex += line.at(8);
+				len = hex_to_int(hex);
+				if ( line.length()-9 == len*2 ) {
+					hex = "000000";
+					int addr;
+					for ( int i = 0; i < 6; i++ ) {
+						hex.at(i) = line.at(i+1);
+					}
+					addr = hex_to_int6(hex);
+					for  ( int i = 0; i < len; i++ ) {
+						hex = "";
+						hex += line.at(2*(i+4)+1);
+						hex += line.at(2*(i+5));
+						mem[addr][0] = hex_to_int(hex);
+						addr++;
+					}
+				} else {
+					//fatalerror("TEXT RECORD NOT CORRECT.");
+					cout << "TEXT RECORD NOT CORRECT." << endl;
+					return;
+				}
 				break;
 			case 'E':
 				if ( line.length() == 7 ) {
@@ -89,4 +112,9 @@ void readinput ( char* input ) {
 				break;
 		}
 	}
+	pass2(start_address);
+}
+
+void pass2 ( int start_address ) {
+	
 }

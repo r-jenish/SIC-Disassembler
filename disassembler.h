@@ -3,5 +3,6 @@
 #include <string>
 
 void readinput(char *);
+void pass2(int);
 
 #endif
