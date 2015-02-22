@@ -46,3 +46,17 @@ std::string int_to_hex ( int num ) {
 	}
 	return hex;
 }
+
+int hex_to_int6 ( std::string hex ) {
+	hex = lower_to_upper(hex);
+	std::string temp = "00";
+	int a[3];
+	int ans;
+	for ( int i = 0; i < 3; i++ ) {
+		temp.at(0) = hex.at(2*i);
+		temp.at(1) = hex.at((2*i)+1);
+		a[i] = hex_to_int(temp);
+	}
+	ans = a[0]*16*16 + a[1]*16 + a[2];
+	return ans;
+}
