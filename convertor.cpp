@@ -3,6 +3,11 @@
 #include "convertor.h"
 
 std::string lower_to_upper ( std::string hex ) {
+	if ( hex.length() == 1 ) {
+		char x = hex.at(0);
+		hex = "0";
+		hex += x;
+	} 
 	for ( int i = 0; i < 2; i++ ) {
 		if ( hex.at(i) >= 'a' && hex.at(i) <= 'f' ) {
 			hex.at(i) = hex.at(i) - 'a' + 'A';
@@ -12,6 +17,7 @@ std::string lower_to_upper ( std::string hex ) {
 }
 
 int hex_to_int ( std::string hex ) {
+	hex = lower_to_upper(hex);
 	int a[2];
 	int ans;
 	ans = 0;
@@ -27,15 +33,15 @@ int hex_to_int ( std::string hex ) {
 }
 
 std::string int_to_hex ( int num ) {
-	int quo, rem;
-	quo = num/16;
-	rem = num%16;
+	int a[2];
+	a[0] = num/16;
+	a[1] = num%16;
 	std::string hex = "00";
 	for ( int i = 0; i < 2; i++ ) {
-		if ( quo < 10 ) {
-			hex.at(i) = quo + '0';
+		if ( a[i] < 10 ) {
+			hex.at(i) = a[i] + '0';
 		} else {
-			hex.at(i) = quo - 10 + 'A';
+			hex.at(i) = a[i] - 10 + 'A';
 		}
 	}
 	return hex;
