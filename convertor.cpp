@@ -57,6 +57,6 @@ int hex_to_int6 ( std::string hex ) {
 		temp.at(1) = hex.at((2*i)+1);
 		a[i] = hex_to_int(temp);
 	}
-	ans = a[0]*16*16 + a[1]*16 + a[2];
+	ans = a[0]*16*16*16*16 + a[1]*16*16 + a[2];
 	return ans;
 }
