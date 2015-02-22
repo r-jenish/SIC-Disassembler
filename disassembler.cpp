@@ -1,5 +1,7 @@
 #include "disassembler.h"
 #include "convertor.h"
+#include "symtable.h"
+#include "optable.h"
 #include "error.h"
 #include <string>
 #include <fstream>
@@ -13,13 +15,16 @@ int exe_address;
 int prog_length;
 int header_record[19];
 bool recordflag[2] = {false,false};
-int mem[65540][2];						 /*mem[][0] = code and mem[][1] = data*/
+int mem[65540][4];						 /*mem[][0] = hexvalue mem[][1] = 1 =>inst and mem[][1] = 2 =>data mem[][2] = 0 => simple addressing else index based mem[][3] => visited or not*/
 int end_record[7];
+int counter = 0;
 
 void clearmem () {
 	for ( int i = 0; i < 65540; i++ ) {
 		mem[i][0] = -1;
 		mem[i][1] = -1;
+		mem[i][2] = 0;
+		mem[i][3] = 0;
 	}
 }
 
@@ -112,9 +117,123 @@ void readinput ( char* input ) {
 				break;
 		}
 	}
-	pass2(start_address);
+	mem[exe_address][1] = 1;
+	pass2(exe_address);
 }
 
-void pass2 ( int start_address ) {
-	
+void pass2 ( int exeaddr ) {
+	mem[exeaddr][3] = 1;
+	cout << hex << exeaddr << " " << dec <<  mem[exeaddr+1][0] << endl;
+	int memvalue = mem[exeaddr][0];
+	string mnemonic = get_mnemonic(memvalue);
+	int index;
+	int effaddr;
+	if ( (mem[exeaddr+1][0]&128) == 128 ) {
+		index = 1;
+		mem[exeaddr][2] = 1;
+		effaddr = ((mem[exeaddr+1][0]&(127))*16*16) + mem[exeaddr+2][0];
+	} else {
+		index = 0;
+		mem[exeaddr][2] = 0;
+		effaddr = (mem[exeaddr+1][0]*16*16) + mem[exeaddr+2][0];
+	}
+	if ( mem[exeaddr+3][1] == -1 ) {
+		if ( mnemonic == "LDA"  ||
+			 mnemonic == "LDX"  ||
+			 mnemonic == "LDL"  ||
+			 mnemonic == "ADD"  ||
+			 mnemonic == "SUB"  ||
+			 mnemonic == "MUL"  ||
+			 mnemonic == "DIV"  ||
+			 mnemonic == "COMP" ||
+			 mnemonic == "TIX"  ||
+			 mnemonic == "AND"  ||
+			 mnemonic == "OR"     ) {
+			mem[exeaddr+3][1] = 1;
+			mem[effaddr][0] = 0;
+			mem[effaddr][1] = 2;
+			mem[effaddr][2] = 0;
+			if ( get_label(effaddr) == -1 ) {
+				set_symtab(effaddr,counter,1);
+				counter++;
+			}
+		}
+		if ( mnemonic == "STA"  ||
+			 mnemonic == "STX"  ||
+			 mnemonic == "STL"  ||
+			 mnemonic == "STSW"   ) {
+			mem[exeaddr+3][1] = 1;
+			mem[effaddr][0] = 0;
+			mem[effaddr][1] = 2;
+			mem[effaddr][2] = 0;
+			if ( get_label(effaddr) == -1 ) {
+				set_symtab(effaddr,counter,1);
+				set_flag(effaddr);
+				counter++;
+			}
+		}
+		if ( mnemonic == "JEQ"  ||
+			 mnemonic == "JGT"  ||
+			 mnemonic == "JLT"  ||
+			 mnemonic == "JSUB" ||
+			 mnemonic == "J"      ) {
+			mem[exeaddr+3][1] = 1;
+			if ( get_label(effaddr) == -1 ) {
+				set_symtab(effaddr,counter,3);
+				counter++;
+			}
+			if ( mem[effaddr][1] == -1 ) {
+				mem[effaddr][1] = 1;
+				pass2(effaddr);
+			}
+		}
+		if ( mnemonic == "LDCH" ) {
+			mem[exeaddr+3][1] = 1;
+			mem[effaddr][0] = 0;
+			mem[effaddr][1] = 2;
+			mem[effaddr][2] = 0;
+			if ( get_label(effaddr) == -1 || get_status(effaddr) == 1) {
+				set_symtab(effaddr,counter,2);
+				counter++;
+			}
+		}
+		if ( mnemonic == "STCH" ) {
+			mem[exeaddr+3][1] = 1;
+			mem[effaddr][0] = 0;
+			mem[effaddr][1] = 2;
+			mem[effaddr][2] = 0;
+			if ( get_label(effaddr) == -1 || get_status(effaddr) == 1) {
+				set_symtab(effaddr,counter,2);
+				set_flag(effaddr);
+				counter++;
+			}
+		}
+		if ( mnemonic == "RD"   ||
+			 mnemonic == "WD"   ||
+			 mnemonic == "TD"     ) {
+			mem[exeaddr+3][1] = 1;
+			mem[effaddr][0] = 0;
+			mem[effaddr][1] = 2;
+			mem[effaddr][2] = 0;
+			if ( get_label(effaddr) == -1 ) {
+				set_symtab(effaddr,counter,2);
+				counter++;
+			}
+		}
+	}
+	if ( mnemonic == "J"    ||
+		 mnemonic == "RSUB"   ) {
+		return;
+	}
+	if ( mem[exeaddr+3][0] != -1 && mem[exeaddr+3][1] != -1 && mem[exeaddr+3][3] == 0 ) {
+		pass2(exeaddr+3);
+	}
+}
+
+void print () {
+	for ( int i = 0; i < 65540; i++ ) {
+		if ( mem[i][0] != -1 ) {
+			printf("%7X %3d %3d %3d\n",i,mem[i][0],mem[i][1],mem[i][2]);
+		}
+	}
 }

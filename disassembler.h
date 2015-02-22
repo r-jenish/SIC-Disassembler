@@ -4,5 +4,6 @@
 
 void readinput(char *);
 void pass2(int);
+void print(void);
 
 #endif
