@@ -3,6 +3,7 @@
 #include <string>
 
 void fatalerror(std::string);
+void warningmessage(std::string);
 void displaylastmessage(void);
 void infileopened(void);
 void infileclosed(void);

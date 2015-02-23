@@ -16,7 +16,7 @@ int main (int argc, char *argv[]) {
 		finishdisassembling();
 		displaylastmessage();
 	} else {
-		fatalerror("TOO LESS ARGUMENTS.\nUsage:\n\t./sicdisassembler inputfile outputfile");
+		fatalerror("TOO LESS ARGUMENTS.\nUsage:\t./sicdisassembler inputfile outputfile");
 	}
 	return 0;
 }

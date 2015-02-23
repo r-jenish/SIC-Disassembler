@@ -9,6 +9,10 @@ void fatalerror(std::string err) {
 	exit(-1);
 }
 
+void warningmessage(std::string war) {
+	std::cout << "! " << war << std::endl;
+}
+
 void infileopened() {
 	std::cout << "+ Object file successfully opened." << std::endl;
 }

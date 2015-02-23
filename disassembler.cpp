@@ -379,7 +379,7 @@ int getnoofresword ( int addr ) {
 	int i = getnextaddr(addr);
 	i = i - addr;
 	if ( i%3 != 0 ) {
-		fatalerror("RESW must be a multiple of 3");
+		warningmessage("RESW must be a multiple of 3. Check the input file.");
 	}
 	i = i/3;
 	return i;
