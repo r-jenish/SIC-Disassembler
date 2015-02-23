@@ -1,0 +1,11 @@
+1000  TEST    START  1000      
+1000  FIRST   LDA    var0      
+1003          STA    var1      
+1006          LDCH   var2      
+1009          STCH   var3      
+
+100C  var1    RESW   1         
+100F  var0    WORD   5         
+1012  var2    BYTE   C'Z'      
+1013  var3    RESB   1         
+              END    FIRST     
