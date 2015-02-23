@@ -138,7 +138,8 @@ void pass2 ( int exeaddr ) {
 		mem[exeaddr][2] = 0;
 		effaddr = (mem[exeaddr+1][0]*16*16) + mem[exeaddr+2][0];
 	}
-	if ( mem[exeaddr+3][1] == -1 ) {
+	//cout << hex << exeaddr << " " << dec <<  mem[exeaddr][1]  <<  " "<< hex << effaddr << dec << endl;
+	if ( mem[exeaddr][1] != 2 ) {
 		if ( mnemonic == "LDA"  ||
 			 mnemonic == "LDX"  ||
 			 mnemonic == "LDL"  ||
@@ -150,7 +151,9 @@ void pass2 ( int exeaddr ) {
 			 mnemonic == "TIX"  ||
 			 mnemonic == "AND"  ||
 			 mnemonic == "OR"     ) {
-			mem[exeaddr+3][1] = 1;
+			if ( mem[exeaddr+3][1] == -1) {
+				mem[exeaddr+3][1] = 1;
+			}
 			if ( mem[effaddr][0] == -1 ) {
 				mem[effaddr][0] = 0;
 			}
@@ -165,7 +168,9 @@ void pass2 ( int exeaddr ) {
 			 mnemonic == "STX"  ||
 			 mnemonic == "STL"  ||
 			 mnemonic == "STSW"   ) {
-			mem[exeaddr+3][1] = 1;
+			if ( mem[exeaddr+3][1] == -1) {
+				mem[exeaddr+3][1] = 1;
+			}
 			if ( mem[effaddr][0] == -1 ) {
 				mem[effaddr][0] = 0;
 			}
@@ -182,18 +187,22 @@ void pass2 ( int exeaddr ) {
 			 mnemonic == "JLT"  ||
 			 mnemonic == "JSUB" ||
 			 mnemonic == "J"      ) {
-			mem[exeaddr+3][1] = 1;
+			if ( mem[exeaddr+3][1] == -1) {
+				mem[exeaddr+3][1] = 1;
+			}
 			if ( get_label(effaddr) == -1 ) {
 				set_symtab(effaddr,icounter,3);
 				icounter++;
 			}
-			if ( mem[effaddr][1] == -1 ) {
+			if ( mem[effaddr][1] == -1 && mem[effaddr][3] == 0) {
 				mem[effaddr][1] = 1;
 				pass2(effaddr);
 			}
 		}
 		if ( mnemonic == "LDCH" ) {
-			mem[exeaddr+3][1] = 1;
+			if ( mem[exeaddr+3][1] == -1) {
+				mem[exeaddr+3][1] = 1;
+			}
 			if ( mem[effaddr][0] == -1 ) {
 				mem[effaddr][0] = 0;
 			}
@@ -205,7 +214,9 @@ void pass2 ( int exeaddr ) {
 			}
 		}
 		if ( mnemonic == "STCH" ) {
-			mem[exeaddr+3][1] = 1;
+			if ( mem[exeaddr+3][1] == -1) {
+				mem[exeaddr+3][1] = 1;
+			}
 			if ( mem[effaddr][0] == -1 ) {
 				mem[effaddr][0] = 0;
 			}
@@ -220,7 +231,9 @@ void pass2 ( int exeaddr ) {
 		if ( mnemonic == "RD"   ||
 			 mnemonic == "WD"   ||
 			 mnemonic == "TD"     ) {
-			mem[exeaddr+3][1] = 1;
+			if ( mem[exeaddr+3][1] == -1) {
+				mem[exeaddr+3][1] = 1;
+			}
 			if ( mem[effaddr][0] == -1 ) {
 				mem[effaddr][0] = 0;
 			}
