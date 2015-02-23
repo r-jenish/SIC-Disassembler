@@ -1,0 +1,7 @@
+0000  TEST    START  0         
+0000  FIRST   STA    var0      
+0003          LDA    var0      
+0006          RSUB  
+
+0009  var0    RESW   1         
+              END    FIRST     

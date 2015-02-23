@@ -1,0 +1,50 @@
+1000  COPY    START  1000      
+1000  FIRST   STL    var0      
+1003  ins6    JSUB   ins0      
+1006          LDA    var3      
+1009          COMP   var1      
+100C          JEQ    ins3      
+100F          JSUB   ins4      
+1012          J      ins6      
+1015  ins3    LDA    var6      
+1018          STA    var4      
+101B          LDA    var7      
+101E          STA    var3      
+1021          JSUB   ins4      
+1024          LDL    var0      
+1027          RSUB  
+
+102A  var6    BYTE   C'EOF'    
+102D  var7    WORD   3         
+1030  var1    WORD   0         
+1033  var0    RESW   1         
+1036  var3    RESW   1         
+1039  var4    RESB   4096      
+
+2039  ins0    LDX    var1      
+203C          LDA    var1      
+203F  ins1    TD     var2      
+2042          JEQ    ins1      
+2045          RD     var2      
+2048          COMP   var1      
+204B          JEQ    ins2      
+204E          STCH   var4,X    
+2051          TIX    var5      
+2054          JLT    ins1      
+2057  ins2    STX    var3      
+205A          RSUB  
+
+205D  var2    BYTE   X'F1'     
+205E  var5    WORD   4096      
+
+2061  ins4    LDX    var1      
+2064  ins5    TD     var8      
+2067          JEQ    ins5      
+206A          LDCH   var4,X    
+206D          WD     var8      
+2070          TIX    var3      
+2073          JLT    ins5      
+2076          RSUB  
+
+2079  var8    BYTE   X'05'     
+              END    FIRST     

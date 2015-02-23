@@ -328,12 +328,21 @@ void writeoutput (char * output) {
 			}
 			if ( get_status(i) == 1) {
 				if ( get_flag(i) == 0 ) {
-					stream.str(std::string());
-					stream << "var" << get_label(i);																									//var label
-					label = stream.str();
-					inst = "WORD";
-					outfile << right << setw(4) << setfill('0') << hex << uppercase << i << dec << left << "  " << setw(7) << setfill(fill) << label << " " << setw(6) << inst << " " << setw(10) << getinttoprint(i) << endl;
-					//printf("%-10s %-6s %-10d\n", label.c_str(),inst.c_str(),getinttoprint(i));
+					if ( !wordorbyte(i) ) {
+						stream.str(std::string());
+						stream << "var" << get_label(i);																									//var label
+						label = stream.str();
+						inst = "WORD";
+						outfile << right << setw(4) << setfill('0') << hex << uppercase << i << dec << left << "  " << setw(7) << setfill(fill) << label << " " << setw(6) << inst << " " << setw(10) << getinttoprint(i) << endl;
+						//printf("%-10s %-6s %-10d\n", label.c_str(),inst.c_str(),getinttoprint(i));
+					} else {
+						stream.str(std::string());
+						stream << "var" << get_label(i);																									//var label
+						label = stream.str();
+						inst = "BYTE";
+						operand = getbytetoprint(i);
+						outfile << right << setw(4) << setfill('0') << hex << uppercase << i << dec << left << "  " << setw(7) << setfill(fill) << label << " " << setw(6) << inst << " " << setw(10) << operand << endl;
+					}
 				} else {
 					stream.str(std::string());
 					stream << "var" << get_label(i);																									//var label
@@ -390,6 +399,20 @@ int getinttoprint ( int addr ) {
 	i += mem[addr+1][0]*16*16;
 	i += mem[addr+2][0];
 	return i;
+}
+
+bool wordorbyte ( int addr ) {
+	int i = getnextaddr(addr);
+	bool flag = true;
+	int z;
+	for ( int j = addr; j < i; j++ ) {
+		z = mem[j][0];
+		if ( !( (z >= 'a' && z <= 'z') || (z >= 'A' && z <= 'Z') || (z >= '0' && z <= '9') ) ) {
+			flag = false;
+			break;
+		}
+	}
+	return flag;
 }
 
 int getnoofresbyte ( int addr ) {

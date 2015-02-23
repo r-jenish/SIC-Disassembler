@@ -11,5 +11,6 @@ int getinttoprint(int);
 int getnoofresbyte(int);
 std::string getbytetoprint(int);
 int getnextaddr(int);
+bool wordorbyte(int);
 
 #endif
