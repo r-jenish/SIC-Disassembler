@@ -3,6 +3,7 @@
 
 #include <string>
 
+void displaytitle(void);
 void fatalerror(std::string);
 void warningmessage(std::string);
 void displaylastmessage(void);

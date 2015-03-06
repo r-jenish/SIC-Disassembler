@@ -7,6 +7,7 @@
 #include "util.h"
 
 int main (int argc, char *argv[]) {
+	displaytitle();
 	if ( argc == 3 ) {
 		startingdisassembling();
 		initialise_optab();

@@ -12,6 +12,19 @@
 #define KCYN  "\x1B[1;36m"
 #define KWHT  "\x1B[1;37m"
 
+void displaytitle() {
+	std::cout << KRED
+		"                           ___  ___  ___                           \n"KYEL
+		"                          / __||_ _|/ __|                          \n"KGRN
+		"                          \\__ \\ | || (__                           \n"KBLU
+		"                          |___/|___|\\___|                          \n" KCYN
+		"  ___  ___  ___    _    ___  ___  ___  __  __  ___  _     ___  ___ \n"KMAG
+		" |   \\|_ _|/ __|  /_\\  / __|/ __|| __||  \\/  || _ )| |   | __|| _ \\\n"KRED
+		" | |) || | \\__ \\ / _ \\ \\__ \\\\__ \\| _| | |\\/| || _ \\| |__ | _| |   /\n"KYEL
+		" |___/|___||___//_/ \\_\\|___/|___/|___||_|  |_||___/|____||___||_|_\\\n"KGRN
+		"                                                                   \n" KNRM;
+}
+
 void fatalerror(std::string err) {
 	std::cout << KRED << "- " << err << std::endl;
 	displaylastmessage();
