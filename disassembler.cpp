@@ -408,9 +408,18 @@ int getnoofresword ( int addr ) {
 }
 
 int getinttoprint ( int addr ) {
-	int i = mem[addr][0]*16*16*16*16;
+	int i;
+	bool flag = false;
+	if ( (mem[addr][0] >> 7) & 1 ) {
+		flag = true;
+	}
+	mem[addr][0] = mem[addr][0]&127;
+	i = mem[addr][0]*16*16*16*16;
 	i += mem[addr+1][0]*16*16;
 	i += mem[addr+2][0];
+	if ( flag ) {
+		i -= 8388608;
+	}
 	return i;
 }
 
@@ -441,7 +450,7 @@ string getbytetoprint( int addr ) {
 	int z;
 	for ( int j = addr; j < i; j++ ) {
 		z = mem[j][0];
-		if ( !( (z >= 'a' && z <= 'z') || (z >= 'A' && z <= 'Z') || (z >= '0' && z <= '9') ) ) {
+		if ( !isprint(z) ) {
 			flag = false;
 			break;
 		}
@@ -449,14 +458,7 @@ string getbytetoprint( int addr ) {
 	if ( flag ) {
 		hex += "C'";
 		for ( int j = addr; j < i; j++ ) {
-			z = mem[j][0];
-			if ( z >= 'a' && z <= 'z' ) {
-				hex += z;
-			} else if ( z >= 'A' && z <= 'Z' ) {
-				hex += z;
-			} else if ( z >= '0' && z <= '9' ) {
-				hex += z;
-			}
+			hex += mem[j][0];
 		}
 		hex +="'";
 	} else {
