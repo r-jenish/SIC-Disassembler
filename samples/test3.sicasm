@@ -1,0 +1,12 @@
+1000  STRCPY  START  1000      
+1000  FIRST   LDX    var0      
+1003  ins0    LDCH   var1,X    
+1006          STCH   var2,X    
+1009          TIX    var3      
+100C          JLT    ins0      
+
+100F  var1    BYTE   C'TEST STRING'
+101A  var2    RESB   11        
+1025  var0    WORD   0         
+1028  var3    WORD   -79       
+              END    FIRST     
