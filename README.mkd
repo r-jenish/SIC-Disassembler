@@ -16,6 +16,7 @@ make
 
 USAGE
 -----
+In the bin folder execute the following command:
 ```
 ./sicdisassembler input-object-file ouput-file
 ```
