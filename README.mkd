@@ -1,0 +1,25 @@
+SIC Disassembler
+================
+
+SIC which stands for Simplified Instructional Computer is a hypothetical architecture that was used by Leland Beck in his book 'System Software' to explain the concepts of assemblers, compilers and operating systems. 
+
+This project aims at disassembling the SIC object file.
+
+COMPILATION
+-----------
+```
+mkdir bin
+cd bin/
+cmake ..
+make
+```
+
+USAGE
+-----
+```
+./sicdisassembler input-object-file ouput-file
+```
+
+LICENSE
+-------
+This software is licensed under MIT License. For more details, please refer to [License](LICENSE) file or at [jenish.mit-license.org](http://jenish.mit-license.org/).
