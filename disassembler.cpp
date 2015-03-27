@@ -418,7 +418,7 @@ int getinttoprint ( int addr ) {
 	i += mem[addr+1][0]*16*16;
 	i += mem[addr+2][0];
 	if ( flag ) {
-		i -= 8388608;
+		i -= (1<<23);
 	}
 	return i;
 }
